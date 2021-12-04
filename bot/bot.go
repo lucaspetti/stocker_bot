@@ -6,13 +6,70 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
+type StockerBot struct {
+	initialState state
+	quoteSearch  state
+
+	currentState state
+
+	botApi       *tgbotapi.BotAPI
+	stockFetcher stocks.QuoteFetcher
+}
+
+type state interface {
+	buildResponse(message string) (response string)
+}
+
+type StockBot interface {
+	enterQuoteState() (response string)
+	enterInitialState() (response string)
+	getStockQuote(symbol string) (response string, err error)
+}
+
+func NewStockerBot(botApi *tgbotapi.BotAPI, stockFetcher stocks.QuoteFetcher) *StockerBot {
+	stockerBot := &StockerBot{
+		botApi:       botApi,
+		stockFetcher: stockFetcher,
+	}
+
+	initialState := &InitialState{
+		stockerBot: stockerBot,
+	}
+
+	quoteSearch := &QuoteSearchState{
+		stockerBot: stockerBot,
+	}
+
+	stockerBot.currentState = initialState
+
+	stockerBot.initialState = initialState
+	stockerBot.quoteSearch = quoteSearch
+	return stockerBot
+}
+
+func (bot *StockerBot) enterQuoteState() (response string) {
+	bot.currentState = bot.quoteSearch
+
+	return "Hello, now you can search for your desired stocks"
+}
+
+func (bot *StockerBot) enterInitialState() (response string) {
+	bot.currentState = bot.initialState
+
+	return welcomeMessage
+}
+
+func (bot *StockerBot) getStockQuote(symbol string) (response string, err error) {
+	return bot.stockFetcher.GetQuote(symbol)
+}
+
 func Start(apiToken string, authorizedUserID int) {
 	bot, err := tgbotapi.NewBotAPI(apiToken)
-	parser := NewParser(stocks.Fetcher{})
-
 	if err != nil {
+		// TODO: Retry message or handle error better
 		panic(err)
 	}
+	stockerBot := NewStockerBot(bot, stocks.Fetcher{})
 
 	bot.Debug = true
 
@@ -28,6 +85,7 @@ func Start(apiToken string, authorizedUserID int) {
 
 	updates, err := bot.GetUpdatesChan(updateConfig)
 	if err != nil {
+		// TODO: Retry message or handle error better
 		panic(err)
 	}
 
@@ -38,19 +96,13 @@ func Start(apiToken string, authorizedUserID int) {
 		}
 
 		message := update.Message.Text
-		var msgText string
+		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
 
 		if update.Message.From.ID != authorizedUserID {
-			msgText = "Unauthorized user"
+			msg.Text = "Unauthorized user"
 		} else {
-			msgText = parser.Parse(message)
+			msg.Text = stockerBot.currentState.buildResponse(message)
 		}
-
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, msgText)
-		// We'll also say that this message is a reply to the previous message.
-		// For any other specifications than Chat ID or Text, you'll need to
-		// set fields on the `MessageConfig`.
-		msg.ReplyToMessageID = update.Message.MessageID
 
 		if _, err := bot.Send(msg); err != nil {
 			// TODO: Retry message or handle error better
