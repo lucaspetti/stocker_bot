@@ -43,8 +43,6 @@ func TestInitialState(t *testing.T) {
 type mockStockerBot struct {
 	mockEnterQuoteStateResponse   string
 	mockEnterInitialStateResponse string
-	mockStockQuoteResponse        string
-	errFetchingQuote              error
 }
 
 func (m mockStockerBot) enterQuoteState() (response string) {
@@ -53,12 +51,4 @@ func (m mockStockerBot) enterQuoteState() (response string) {
 
 func (m mockStockerBot) enterInitialState() (response string) {
 	return m.mockEnterInitialStateResponse
-}
-
-func (m mockStockerBot) getStockQuote(symbol string) (response string, err error) {
-	if m.errFetchingQuote != nil {
-		return "", m.errFetchingQuote
-	}
-
-	return m.mockStockQuoteResponse, nil
 }

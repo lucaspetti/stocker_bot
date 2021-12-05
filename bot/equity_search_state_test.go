@@ -30,7 +30,7 @@ func TestQuoteSearchState(t *testing.T) {
 		},
 		{
 			Title:            "Error fetching quote",
-			message:          "Death Star Co.",
+			message:          "",
 			expectedResponse: tickerNotFound,
 			errFetchingQuote: SimulatedFetcherError,
 		},
@@ -39,12 +39,16 @@ func TestQuoteSearchState(t *testing.T) {
 	for _, test := range cases {
 		mockBot := &mockStockerBot{
 			mockEnterInitialStateResponse: test.mockEnterInitialStateResponse,
-			mockStockQuoteResponse:        test.mockStockQuoteResponse,
-			errFetchingQuote:              test.errFetchingQuote,
 		}
 
-		quoteState := &QuoteSearchState{
+		mockDataGetter := &MockDataGetter{
+			Response: test.mockStockQuoteResponse,
+			Err:      test.errFetchingQuote,
+		}
+
+		quoteState := &EquitySearchState{
 			stockerBot: mockBot,
+			dataGetter: mockDataGetter,
 		}
 
 		got := quoteState.buildResponse(test.message)
@@ -54,4 +58,17 @@ func TestQuoteSearchState(t *testing.T) {
 			t.Errorf("got %s, want %s", got, want)
 		}
 	}
+}
+
+type MockDataGetter struct {
+	Response string
+	Err      error
+}
+
+func (mock MockDataGetter) GetData(symbol string) (response string, err error) {
+	if symbol == "" {
+		return "", mock.Err
+	}
+
+	return mock.Response, nil
 }

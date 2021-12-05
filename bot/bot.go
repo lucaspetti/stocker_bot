@@ -1,19 +1,20 @@
 package bot
 
 import (
-	"stocker_bot/stocks"
+	"stocker_bot/quote"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	equity "github.com/piquette/finance-go/equity"
+	finance_quote "github.com/piquette/finance-go/quote"
 )
 
 type StockerBot struct {
 	initialState state
-	quoteSearch  state
+	equitySearch state
 
 	currentState state
 
-	botApi       *tgbotapi.BotAPI
-	stockFetcher stocks.QuoteFetcher
+	botApi *tgbotapi.BotAPI
 }
 
 type state interface {
@@ -23,34 +24,38 @@ type state interface {
 type StockBot interface {
 	enterQuoteState() (response string)
 	enterInitialState() (response string)
-	getStockQuote(symbol string) (response string, err error)
 }
 
-func NewStockerBot(botApi *tgbotapi.BotAPI, stockFetcher stocks.QuoteFetcher) *StockerBot {
+func NewStockerBot(
+	botApi *tgbotapi.BotAPI,
+	equityGetter quote.DataGetter,
+) *StockerBot {
 	stockerBot := &StockerBot{
-		botApi:       botApi,
-		stockFetcher: stockFetcher,
+		botApi: botApi,
 	}
 
 	initialState := &InitialState{
 		stockerBot: stockerBot,
 	}
 
-	quoteSearch := &QuoteSearchState{
+	equitySearchState := &EquitySearchState{
 		stockerBot: stockerBot,
+		dataGetter: equityGetter,
 	}
 
 	stockerBot.currentState = initialState
 
 	stockerBot.initialState = initialState
-	stockerBot.quoteSearch = quoteSearch
+	stockerBot.equitySearch = equitySearchState
 	return stockerBot
 }
 
 func (bot *StockerBot) enterQuoteState() (response string) {
-	bot.currentState = bot.quoteSearch
+	bot.currentState = bot.equitySearch
 
-	return "Hello, now you can search for your desired stocks"
+	return `Hello, now you can search for your desired stocks
+
+Click /back to return to the main menu`
 }
 
 func (bot *StockerBot) enterInitialState() (response string) {
@@ -59,17 +64,15 @@ func (bot *StockerBot) enterInitialState() (response string) {
 	return welcomeMessage
 }
 
-func (bot *StockerBot) getStockQuote(symbol string) (response string, err error) {
-	return bot.stockFetcher.GetQuote(symbol)
-}
-
 func Start(apiToken string, authorizedUserID int) {
 	bot, err := tgbotapi.NewBotAPI(apiToken)
 	if err != nil {
 		// TODO: Retry message or handle error better
 		panic(err)
 	}
-	stockerBot := NewStockerBot(bot, stocks.Fetcher{})
+
+	equityGetter := quote.NewEquityGet(equity.Get, finance_quote.Get)
+	stockerBot := NewStockerBot(bot, equityGetter)
 
 	bot.Debug = true
 
