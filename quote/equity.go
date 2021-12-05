@@ -12,6 +12,8 @@ const equityTemplate = `
 Name:      {{.Data.LongName}}
 Symbol:    {{.Quote.Symbol}}
 
+Regular Market Price: {{.Quote.RegularMarketPrice}} {{.Quote.CurrencyID}}
+
 EPS Trailing: {{.Data.EpsTrailingTwelveMonths}}
 EPS Forward:  {{.Data.EpsForward}}
 
