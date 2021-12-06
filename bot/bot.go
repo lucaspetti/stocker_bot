@@ -4,6 +4,7 @@ import (
 	"stocker_bot/quote"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	"github.com/piquette/finance-go/crypto"
 	equity "github.com/piquette/finance-go/equity"
 	finance_quote "github.com/piquette/finance-go/quote"
 )
@@ -11,6 +12,7 @@ import (
 type StockerBot struct {
 	initialState state
 	equitySearch state
+	cryptoSearch state
 
 	currentState state
 
@@ -24,11 +26,13 @@ type state interface {
 type StockBot interface {
 	enterQuoteState() (response string)
 	enterInitialState() (response string)
+	enterCryptoState() (response string)
 }
 
 func NewStockerBot(
 	botApi *tgbotapi.BotAPI,
 	equityGetter quote.DataGetter,
+	cryptoGetter quote.DataGetter,
 ) *StockerBot {
 	stockerBot := &StockerBot{
 		botApi: botApi,
@@ -43,10 +47,16 @@ func NewStockerBot(
 		dataGetter: equityGetter,
 	}
 
+	cryptoSearchState := &CryptoSearchState{
+		stockerBot: stockerBot,
+		dataGetter: cryptoGetter,
+	}
+
 	stockerBot.currentState = initialState
 
 	stockerBot.initialState = initialState
 	stockerBot.equitySearch = equitySearchState
+	stockerBot.cryptoSearch = cryptoSearchState
 	return stockerBot
 }
 
@@ -54,6 +64,14 @@ func (bot *StockerBot) enterQuoteState() (response string) {
 	bot.currentState = bot.equitySearch
 
 	return `Hello, now you can search for your desired stocks
+
+Click /back to return to the main menu`
+}
+
+func (bot *StockerBot) enterCryptoState() (response string) {
+	bot.currentState = bot.cryptoSearch
+
+	return `Hello, now you can search for your desired coins
 
 Click /back to return to the main menu`
 }
@@ -72,7 +90,8 @@ func Start(apiToken string, authorizedUserID int) {
 	}
 
 	equityGetter := quote.NewEquityGet(equity.Get, finance_quote.Get)
-	stockerBot := NewStockerBot(bot, equityGetter)
+	cryptoGetter := quote.NewCryptoGet(crypto.Get, finance_quote.Get)
+	stockerBot := NewStockerBot(bot, equityGetter, cryptoGetter)
 
 	bot.Debug = true
 

@@ -22,13 +22,17 @@ var mockEquity = &finance.Equity{
 }
 
 var mockQuote = &finance.Quote{
-	Symbol: "TICKR",
+	Symbol:             "TICKR",
+	RegularMarketPrice: 100,
+	CurrencyID:         "USD",
 }
 
 func TestGet(t *testing.T) {
 	appliedTemplate := `
 Name:      Mock Ticker
 Symbol:    TICKR
+
+Regular Market Price: 100 USD
 
 EPS Trailing: 0.2
 EPS Forward:  0.5

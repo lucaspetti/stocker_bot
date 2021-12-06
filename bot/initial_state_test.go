@@ -43,6 +43,7 @@ func TestInitialState(t *testing.T) {
 type mockStockerBot struct {
 	mockEnterQuoteStateResponse   string
 	mockEnterInitialStateResponse string
+	mockEnterCryptoStateResponse  string
 }
 
 func (m mockStockerBot) enterQuoteState() (response string) {
@@ -51,4 +52,8 @@ func (m mockStockerBot) enterQuoteState() (response string) {
 
 func (m mockStockerBot) enterInitialState() (response string) {
 	return m.mockEnterInitialStateResponse
+}
+
+func (m mockStockerBot) enterCryptoState() (response string) {
+	return m.mockEnterCryptoStateResponse
 }
