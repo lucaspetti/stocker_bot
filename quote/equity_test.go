@@ -17,8 +17,7 @@ var mockEquity = &finance.Equity{
 	TrailingPE:              1.5,
 	ForwardPE:               2.0,
 	PriceToBook:             3,
-	SharesOutstanding:       5,
-	MarketCap:               1000,
+	MarketCap:               1200000,
 }
 
 var mockQuote = &finance.Quote{
@@ -41,8 +40,7 @@ Trailing PE: 1.5
 Forward PE:  2
 
 Price to Book:     3
-SharesOutstanding: 5
-Market Cap:        1000
+Market Cap:        1.20M
 
 Click /back to go back to main menu
 `

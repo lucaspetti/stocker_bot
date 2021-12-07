@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"html/template"
+	"stocker_bot/numbers"
 
 	finance "github.com/piquette/finance-go"
 )
@@ -21,8 +22,7 @@ Trailing PE: {{.Data.TrailingPE}}
 Forward PE:  {{.Data.ForwardPE}}
 
 Price to Book:     {{.Data.PriceToBook}}
-SharesOutstanding: {{.Data.SharesOutstanding}}
-Market Cap:        {{.Data.MarketCap}}
+Market Cap:        {{.MarketCap}}
 
 Click /back to go back to main menu
 `
@@ -53,8 +53,9 @@ func NewEquityGet(
 }
 
 type EquityData struct {
-	Quote finance.Quote
-	Data  finance.Equity
+	Quote     finance.Quote
+	Data      finance.Equity
+	MarketCap string
 }
 
 func (g EquityGet) GetData(symbol string) (equityResponse string, err error) {
@@ -77,8 +78,9 @@ func (g EquityGet) GetData(symbol string) (equityResponse string, err error) {
 	}
 
 	data := EquityData{
-		Data:  *equity,
-		Quote: *quote,
+		Data:      *equity,
+		Quote:     *quote,
+		MarketCap: numbers.FormatSuffix(equity.MarketCap),
 	}
 
 	buf := &bytes.Buffer{}

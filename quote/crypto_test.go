@@ -22,7 +22,7 @@ StartDate:      0
 
 Regular Market Price: 100 USD
 
-MaxSupply         1000
+MaxSupply         1.00K
 CirculatingSupply 999
 
 Click /back to go back to main menu

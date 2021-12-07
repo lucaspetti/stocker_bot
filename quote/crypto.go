@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"html/template"
+	"stocker_bot/numbers"
 
 	finance "github.com/piquette/finance-go"
 )
@@ -14,8 +15,8 @@ StartDate:      {{.Crypto.StartDate}}
 
 Regular Market Price: {{.Quote.RegularMarketPrice}} {{.Quote.CurrencyID}}
 
-MaxSupply         {{.Crypto.MaxSupply}}
-CirculatingSupply {{.Crypto.CirculatingSupply}}
+MaxSupply         {{.MaxSupply}}
+CirculatingSupply {{.CirculatingSupply}}
 
 Click /back to go back to main menu
 `
@@ -47,8 +48,10 @@ func NewCryptoGet(
 
 // CryptoData holds the data for a Crypto
 type CryptoData struct {
-	Crypto finance.CryptoPair
-	Quote  finance.Quote
+	Crypto            finance.CryptoPair
+	Quote             finance.Quote
+	MaxSupply         string
+	CirculatingSupply string
 }
 
 func (g CryptoGet) GetData(symbol string) (cryptoResponse string, err error) {
@@ -71,8 +74,10 @@ func (g CryptoGet) GetData(symbol string) (cryptoResponse string, err error) {
 	}
 
 	data := CryptoData{
-		Crypto: *crypto,
-		Quote:  *quote,
+		Crypto:            *crypto,
+		Quote:             *quote,
+		MaxSupply:         numbers.FormatSuffix(int64(crypto.MaxSupply)),
+		CirculatingSupply: numbers.FormatSuffix(int64(crypto.CirculatingSupply)),
 	}
 
 	buf := &bytes.Buffer{}
