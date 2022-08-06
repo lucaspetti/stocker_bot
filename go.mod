@@ -3,6 +3,7 @@ module stocker_bot
 go 1.15
 
 require (
+	github.com/Finnhub-Stock-API/finnhub-go/v2 v2.0.13 // indirect
 	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible
 	github.com/joho/godotenv v1.4.0
 	github.com/mitchellh/go-homedir v1.1.0

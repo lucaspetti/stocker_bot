@@ -33,15 +33,19 @@ var startCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("start called")
 
-		apiToken := os.Getenv("TELEGRAM_APITOKEN")
 		authorizedUserID := os.Getenv("AUTHORIZED_USER_ID")
-
 		userID, err := strconv.Atoi(authorizedUserID)
 		if err != nil {
 			log.Fatal("Error converting authorized user id: ", err)
 		}
 
-		bot.Start(apiToken, userID)
+		config := bot.NewConfig(
+			userID,
+			os.Getenv("TELEGRAM_APITOKEN"),
+			os.Getenv("FINNHUB_API_KEY"),
+		)
+
+		bot.Start(*config)
 	},
 }
 

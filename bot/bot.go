@@ -82,8 +82,8 @@ func (bot *StockerBot) enterInitialState() (response string) {
 	return welcomeMessage
 }
 
-func Start(apiToken string, authorizedUserID int) {
-	bot, err := tgbotapi.NewBotAPI(apiToken)
+func Start(config Config) {
+	bot, err := tgbotapi.NewBotAPI(config.telegramApiToken)
 	if err != nil {
 		// TODO: Retry message or handle error better
 		panic(err)
@@ -120,7 +120,7 @@ func Start(apiToken string, authorizedUserID int) {
 		message := update.Message.Text
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
 
-		if update.Message.From.ID != authorizedUserID {
+		if update.Message.From.ID != config.authorizedUserID {
 			msg.Text = "Unauthorized user"
 		} else {
 			msg.Text = stockerBot.currentState.buildResponse(message)
