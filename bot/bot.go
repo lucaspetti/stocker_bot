@@ -3,6 +3,7 @@ package bot
 import (
 	"stocker_bot/quote"
 
+	finnhub "github.com/Finnhub-Stock-API/finnhub-go/v2"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/piquette/finance-go/crypto"
 	equity "github.com/piquette/finance-go/equity"
@@ -89,7 +90,12 @@ func Start(config Config) {
 		panic(err)
 	}
 
-	equityGetter := quote.NewEquityGet(equity.Get, finance_quote.Get)
+	finnhubConfig := finnhub.NewConfiguration()
+	finnhubConfig.AddDefaultHeader("X-Finnhub-Token", config.finnhubApiToken)
+	finnhubClient := finnhub.NewAPIClient(finnhubConfig).DefaultApi
+
+	getValueFunc := quote.GetValueFunc(finnhubClient)
+	equityGetter := quote.NewEquityGet(equity.Get, finance_quote.Get, getValueFunc)
 	cryptoGetter := quote.NewCryptoGet(crypto.Get, finance_quote.Get)
 	stockerBot := NewStockerBot(bot, equityGetter, cryptoGetter)
 
