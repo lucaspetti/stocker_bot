@@ -34,7 +34,7 @@ var startCmd = &cobra.Command{
 		fmt.Println("start called")
 
 		authorizedUserID := os.Getenv("AUTHORIZED_USER_ID")
-		userID, err := strconv.Atoi(authorizedUserID)
+		userID, err := strconv.ParseInt(authorizedUserID, 10, 64)
 		if err != nil {
 			log.Fatal("Error converting authorized user id: ", err)
 		}

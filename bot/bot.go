@@ -2,9 +2,10 @@ package bot
 
 import (
 	"stocker_bot/quote"
+	"strings"
 
 	finnhub "github.com/Finnhub-Stock-API/finnhub-go/v2"
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/piquette/finance-go/crypto"
 	equity "github.com/piquette/finance-go/equity"
 	finance_quote "github.com/piquette/finance-go/quote"
@@ -111,7 +112,7 @@ func Start(config Config) {
 	// frequent requests without having to send nearly as many.
 	updateConfig.Timeout = 30
 
-	updates, err := bot.GetUpdatesChan(updateConfig)
+	updates := bot.GetUpdatesChan(updateConfig)
 	if err != nil {
 		// TODO: Retry message or handle error better
 		panic(err)
@@ -129,7 +130,12 @@ func Start(config Config) {
 		if update.Message.From.ID != config.authorizedUserID {
 			msg.Text = "Unauthorized user"
 		} else {
-			msg.Text = stockerBot.currentState.buildResponse(message)
+			msgText := stockerBot.currentState.buildResponse(message)
+			if strings.Contains(msgText, "<pre>") {
+				msg.ParseMode = tgbotapi.ModeHTML
+			}
+
+			msg.Text = msgText
 		}
 
 		if _, err := bot.Send(msg); err != nil {

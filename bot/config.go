@@ -2,12 +2,12 @@ package bot
 
 type Config struct {
 	telegramApiToken string
-	authorizedUserID int
+	authorizedUserID int64
 	finnhubApiToken  string
 }
 
 func NewConfig(
-	authorizedUserID int,
+	authorizedUserID int64,
 	telegramApiToken,
 	finnhubApiToken string,
 ) *Config {
