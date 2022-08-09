@@ -13,8 +13,8 @@ var SimulatedErrorFromGetValue = errors.New("Simulated Error from Get Value")
 
 var mockEquity = &finance.Equity{
 	LongName:                "Mock Ticker",
-	EpsTrailingTwelveMonths: 0.2,
-	EpsForward:              0.5,
+	EpsTrailingTwelveMonths: 0.25,
+	EpsForward:              0.57,
 	TrailingPE:              1.502323,
 	ForwardPE:               2.002323,
 	PriceToBook:             3,
@@ -22,7 +22,6 @@ var mockEquity = &finance.Equity{
 }
 
 var mockQuote = &finance.Quote{
-	Symbol:             "TICKR",
 	RegularMarketPrice: 100,
 	CurrencyID:         "USD",
 }
@@ -42,33 +41,30 @@ var mockValue = &ValueData{
 
 func TestGet(t *testing.T) {
 	appliedTemplate := `
-Name:      Mock Ticker
-Symbol:    TICKR
-
-Market Price:  100 USD
-Market Cap:    1.20M
-
-EPS Trailing:       0.2
-EPS Forward:       0.5
-EPS Growth 5Y:   8.00%
-
-Trailing PE:      1.50
-Forward PE:     2.00
-
-Value Data:
-
-Price to Book:                             3.00
-Book Value Growth 5Y:             5.05%
-ROI 5Y:                                        10.00
-Revenue Growth 5Y:                  9.01%
-Revenue Per Share Growth 5Y:   4.05%
-Free Operating Cash Flow 5Y:   1.00
-
-Debt:
-
-Long Term Debt/Eq Annual:     3.00
-Total Debt/Total Eq Annual: 2.00
-
+<b>Mock Ticker</b>
+100 USD
+<pre>
+| Mkt Cap    | 1.20M
+| EPS Trail. | 0.25
+| EPS For    | 0.57
+| EPS Gr5Y   | 8.00%
+| Trail. PE  | 1.50
+| Forward PE | 2.00
+</pre>
+<b>Value</b>
+<pre>
+| PB Ratio      | 3.00
+| BV Growth     | 5.05%
+| ROI5Y         | 10.00
+| Rev Gr5Y      | 9.01%
+| RevShareGr 5Y | 4.05%
+| FOCF agr 5Y   | 1.00
+</pre>
+<b>Debt</b>
+<pre>
+Long Term Debt/Eq Y   3.00
+Total Debt/Total Eq Y 2.00
+</pre>
 Click /back to go back to main menu
 `
 

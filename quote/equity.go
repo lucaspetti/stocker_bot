@@ -9,35 +9,31 @@ import (
 	finance "github.com/piquette/finance-go"
 )
 
-// TODO: Format as table
 const equityTemplate = `
-Name:      {{.Data.LongName}}
-Symbol:    {{.Quote.Symbol}}
-
-Market Price:  {{.Quote.RegularMarketPrice}} {{.Quote.CurrencyID}}
-Market Cap:    {{.MarketCap}}
-
-EPS Trailing:       {{.Data.EpsTrailingTwelveMonths}}
-EPS Forward:       {{.Data.EpsForward}}
-EPS Growth 5Y:   {{printf "%.2f" .ValueData.EPSGrowth5Y}}%
-
-Trailing PE:      {{printf "%.2f" .Data.TrailingPE}}
-Forward PE:     {{printf "%.2f" .Data.ForwardPE}}
-
-Value Data:
-
-Price to Book:                             {{printf "%.2f" .Data.PriceToBook}}
-Book Value Growth 5Y:             {{printf "%.2f" .ValueData.BookValueGrowth5Y}}%
-ROI 5Y:                                        {{printf "%.2f" .ValueData.ROI5Y}}
-Revenue Growth 5Y:                  {{printf "%.2f" .ValueData.RevenueGrowth5Y}}%
-Revenue Per Share Growth 5Y:   {{printf "%.2f" .ValueData.RevenueShareGrowth5Y}}%
-Free Operating Cash Flow 5Y:   {{printf "%.2f" .ValueData.FOCFCagr5Y}}
-
-Debt:
-
-Long Term Debt/Eq Annual:     {{printf "%.2f" .ValueData.LongTermDebtPerequityAnnual}}
-Total Debt/Total Eq Annual: {{printf "%.2f" .ValueData.TotalDebtPerTotalEquityAnnual}}
-
+<b>{{.Data.LongName}}</b>
+{{.Quote.RegularMarketPrice}} {{.Quote.CurrencyID}}
+<pre>
+| Mkt Cap    | {{.MarketCap}}
+| EPS Trail. | {{.Data.EpsTrailingTwelveMonths}}
+| EPS For    | {{.Data.EpsForward}}
+| EPS Gr5Y   | {{printf "%.2f" .ValueData.EPSGrowth5Y}}%
+| Trail. PE  | {{printf "%.2f" .Data.TrailingPE}}
+| Forward PE | {{printf "%.2f" .Data.ForwardPE}}
+</pre>
+<b>Value</b>
+<pre>
+| PB Ratio      | {{printf "%.2f" .Data.PriceToBook}}
+| BV Growth     | {{printf "%.2f" .ValueData.BookValueGrowth5Y}}%
+| ROI5Y         | {{printf "%.2f" .ValueData.ROI5Y}}
+| Rev Gr5Y      | {{printf "%.2f" .ValueData.RevenueGrowth5Y}}%
+| RevShareGr 5Y | {{printf "%.2f" .ValueData.RevenueShareGrowth5Y}}%
+| FOCF agr 5Y   | {{printf "%.2f" .ValueData.FOCFCagr5Y}}
+</pre>
+<b>Debt</b>
+<pre>
+Long Term Debt/Eq Y   {{printf "%.2f" .ValueData.LongTermDebtPerequityAnnual}}
+Total Debt/Total Eq Y {{printf "%.2f" .ValueData.TotalDebtPerTotalEquityAnnual}}
+</pre>
 Click /back to go back to main menu
 `
 
