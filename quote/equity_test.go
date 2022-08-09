@@ -15,8 +15,8 @@ var mockEquity = &finance.Equity{
 	LongName:                "Mock Ticker",
 	EpsTrailingTwelveMonths: 0.2,
 	EpsForward:              0.5,
-	TrailingPE:              1.5,
-	ForwardPE:               2.0,
+	TrailingPE:              1.502323,
+	ForwardPE:               2.002323,
 	PriceToBook:             3,
 	MarketCap:               1200000,
 }
@@ -28,13 +28,13 @@ var mockQuote = &finance.Quote{
 }
 
 var mockValue = &ValueData{
-	ROI5Y:                         10.0,
-	RevenueGrowth5Y:               9.0,
-	EPSGrowth5Y:                   8.0,
-	PENormalizedAnnual:            7.0,
-	PEExclExtraTTM:                6.0,
-	BookValueGrowth5Y:             5.0,
-	RevenueShareGrowth5Y:          4.0,
+	ROI5Y:                         10.002,
+	RevenueGrowth5Y:               9.0098,
+	EPSGrowth5Y:                   8.0012,
+	PENormalizedAnnual:            7.0012,
+	PEExclExtraTTM:                6.0012,
+	BookValueGrowth5Y:             5.0523,
+	RevenueShareGrowth5Y:          4.0452,
 	LongTermDebtPerequityAnnual:   3.0,
 	TotalDebtPerTotalEquityAnnual: 2.0,
 	FOCFCagr5Y:                    1.0,
@@ -48,26 +48,26 @@ Symbol:    TICKR
 Market Price:  100 USD
 Market Cap:    1.20M
 
-EPS Trailing:    0.2
-EPS Forward:     0.5
-EPS Growth 5Y:   8
+EPS Trailing:       0.2
+EPS Forward:       0.5
+EPS Growth 5Y:   8.00%
 
-Trailing PE:     1.5
-Forward PE:      2
+Trailing PE:      1.50
+Forward PE:     2.00
 
 Value Data:
 
-Price to Book:                 3
-Book Value Growth 5Y:          5
-ROI 5Y:                        10
-Revenue Growth 5Y:             9
-Revenue Per Share Growth 5Y:   4
-Free Operating Cash Flow 5Y:   1
+Price to Book:                             3.00
+Book Value Growth 5Y:             5.05%
+ROI 5Y:                                        10.00
+Revenue Growth 5Y:                  9.01%
+Revenue Per Share Growth 5Y:   4.05%
+Free Operating Cash Flow 5Y:   1.00
 
 Debt:
 
-Long Term Debt Per Equity Annual:   3
-Total Debt Per Total Equity Annual: 2
+Long Term Debt/Eq Annual:     3.00
+Total Debt/Total Eq Annual: 2.00
 
 Click /back to go back to main menu
 `

@@ -9,6 +9,7 @@ import (
 	finance "github.com/piquette/finance-go"
 )
 
+// TODO: Format as table
 const equityTemplate = `
 Name:      {{.Data.LongName}}
 Symbol:    {{.Quote.Symbol}}
@@ -16,26 +17,26 @@ Symbol:    {{.Quote.Symbol}}
 Market Price:  {{.Quote.RegularMarketPrice}} {{.Quote.CurrencyID}}
 Market Cap:    {{.MarketCap}}
 
-EPS Trailing:    {{.Data.EpsTrailingTwelveMonths}}
-EPS Forward:     {{.Data.EpsForward}}
-EPS Growth 5Y:   {{.ValueData.EPSGrowth5Y}}
+EPS Trailing:       {{.Data.EpsTrailingTwelveMonths}}
+EPS Forward:       {{.Data.EpsForward}}
+EPS Growth 5Y:   {{printf "%.2f" .ValueData.EPSGrowth5Y}}%
 
-Trailing PE:     {{.Data.TrailingPE}}
-Forward PE:      {{.Data.ForwardPE}}
+Trailing PE:      {{printf "%.2f" .Data.TrailingPE}}
+Forward PE:     {{printf "%.2f" .Data.ForwardPE}}
 
 Value Data:
 
-Price to Book:                 {{.Data.PriceToBook}}
-Book Value Growth 5Y:          {{.ValueData.BookValueGrowth5Y}}
-ROI 5Y:                        {{.ValueData.ROI5Y}}
-Revenue Growth 5Y:             {{.ValueData.RevenueGrowth5Y}}
-Revenue Per Share Growth 5Y:   {{.ValueData.RevenueShareGrowth5Y}}
-Free Operating Cash Flow 5Y:   {{.ValueData.FOCFCagr5Y}}
+Price to Book:                             {{printf "%.2f" .Data.PriceToBook}}
+Book Value Growth 5Y:             {{printf "%.2f" .ValueData.BookValueGrowth5Y}}%
+ROI 5Y:                                        {{printf "%.2f" .ValueData.ROI5Y}}
+Revenue Growth 5Y:                  {{printf "%.2f" .ValueData.RevenueGrowth5Y}}%
+Revenue Per Share Growth 5Y:   {{printf "%.2f" .ValueData.RevenueShareGrowth5Y}}%
+Free Operating Cash Flow 5Y:   {{printf "%.2f" .ValueData.FOCFCagr5Y}}
 
 Debt:
 
-Long Term Debt Per Equity Annual:   {{.ValueData.LongTermDebtPerequityAnnual}}
-Total Debt Per Total Equity Annual: {{.ValueData.TotalDebtPerTotalEquityAnnual}}
+Long Term Debt/Eq Annual:     {{printf "%.2f" .ValueData.LongTermDebtPerequityAnnual}}
+Total Debt/Total Eq Annual: {{printf "%.2f" .ValueData.TotalDebtPerTotalEquityAnnual}}
 
 Click /back to go back to main menu
 `

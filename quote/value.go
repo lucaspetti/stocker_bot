@@ -35,16 +35,40 @@ func GetValueFunc(
 
 		metricData := &ValueData{}
 
-		metricData.ROI5Y = (*metrics)["roi5Y"].(float64)
-		metricData.RevenueGrowth5Y = (*metrics)["revenueGrowth5Y"].(float64)
-		metricData.EPSGrowth5Y = (*metrics)["epsGrowth5Y"].(float64)
-		metricData.PENormalizedAnnual = (*metrics)["peNormalizedAnnual"].(float64)
-		metricData.PEExclExtraTTM = (*metrics)["peExclExtraTTM"].(float64)
-		metricData.BookValueGrowth5Y = (*metrics)["bookValueShareGrowth5Y"].(float64)
-		metricData.RevenueShareGrowth5Y = (*metrics)["revenueShareGrowth5Y"].(float64)
-		metricData.LongTermDebtPerequityAnnual = (*metrics)["longTermDebt/equityAnnual"].(float64)
-		metricData.TotalDebtPerTotalEquityAnnual = (*metrics)["totalDebt/totalEquityAnnual"].(float64)
-		metricData.FOCFCagr5Y = (*metrics)["focfCagr5Y"].(float64)
+		if (*metrics)["roi5Y"] != nil {
+			metricData.ROI5Y = (*metrics)["roi5Y"].(float64)
+		}
+		if (*metrics)["revenueGrowth5Y"] != nil {
+			metricData.RevenueGrowth5Y = (*metrics)["revenueGrowth5Y"].(float64)
+		}
+		if (*metrics)["epsGrowth5Y"] != nil {
+			metricData.EPSGrowth5Y = (*metrics)["epsGrowth5Y"].(float64)
+		}
+		// Not being rendered, load it anyway
+		if (*metrics)["peNormalizedAnnual"] != nil {
+			metricData.PENormalizedAnnual = (*metrics)["peNormalizedAnnual"].(float64)
+		}
+		// Not being rendered, load it anyway
+		if (*metrics)["peExclExtraTTM"] != nil {
+			metricData.PEExclExtraTTM = (*metrics)["peExclExtraTTM"].(float64)
+		}
+		if (*metrics)["bookValueShareGrowth5Y"] != nil {
+			metricData.BookValueGrowth5Y = (*metrics)["bookValueShareGrowth5Y"].(float64)
+		}
+		if (*metrics)["revenueShareGrowth5Y"] != nil {
+			metricData.RevenueShareGrowth5Y = (*metrics)["revenueShareGrowth5Y"].(float64)
+		}
+		if (*metrics)["longTermDebt/equityAnnual"] != nil {
+			metricData.LongTermDebtPerequityAnnual = (*metrics)["longTermDebt/equityAnnual"].(float64)
+		}
+		if (*metrics)["totalDebt/totalEquityAnnual"] != nil {
+			metricData.TotalDebtPerTotalEquityAnnual = (*metrics)["totalDebt/totalEquityAnnual"].(float64)
+
+		}
+		if (*metrics)["focfCagr5Y"] != nil {
+			metricData.FOCFCagr5Y = (*metrics)["focfCagr5Y"].(float64)
+
+		}
 
 		return metricData, nil
 	}
