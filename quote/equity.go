@@ -23,6 +23,7 @@ const equityTemplate = `
 <b>Value</b>
 <pre>
 | PB Ratio      | {{printf "%.2f" .Data.PriceToBook}}
+| PB * PE       | {{printf "%.2f" .ValueMultiple}}
 | BV Growth     | {{printf "%.2f" .ValueData.BookValueGrowth5Y}}%
 | ROI5Y         | {{printf "%.2f" .ValueData.ROI5Y}}
 | Rev Gr5Y      | {{printf "%.2f" .ValueData.RevenueGrowth5Y}}%
@@ -70,10 +71,11 @@ func NewEquityGet(
 }
 
 type EquityData struct {
-	Quote     finance.Quote
-	Data      finance.Equity
-	MarketCap string
-	ValueData ValueData
+	Quote         finance.Quote
+	Data          finance.Equity
+	MarketCap     string
+	ValueData     ValueData
+	ValueMultiple float64
 }
 
 func (g EquityGet) GetData(symbol string) (equityResponse string, err error) {
@@ -100,11 +102,14 @@ func (g EquityGet) GetData(symbol string) (equityResponse string, err error) {
 		return "", err
 	}
 
+	valueMultiple := equity.PriceToBook * equity.ForwardPE
+
 	data := EquityData{
-		Data:      *equity,
-		Quote:     *quote,
-		ValueData: *valueData,
-		MarketCap: numbers.FormatSuffix(equity.MarketCap),
+		Data:          *equity,
+		Quote:         *quote,
+		ValueData:     *valueData,
+		MarketCap:     numbers.FormatSuffix(equity.MarketCap),
+		ValueMultiple: valueMultiple,
 	}
 
 	buf := &bytes.Buffer{}

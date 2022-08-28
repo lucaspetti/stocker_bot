@@ -54,6 +54,7 @@ func TestGet(t *testing.T) {
 <b>Value</b>
 <pre>
 | PB Ratio      | 3.00
+| PB * PE       | 6.01
 | BV Growth     | 5.05%
 | ROI5Y         | 10.00
 | Rev Gr5Y      | 9.01%
