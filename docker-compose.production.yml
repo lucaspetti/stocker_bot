@@ -1,0 +1,9 @@
+version: "3.3"
+services:
+  bot:
+    image: ${DOCKER_REGISTRY_HOST}/stocker_bot
+    command: "./stocker_bot start"
+    environment:
+      - TELEGRAM_APITOKEN=${TELEGRAM_APITOKEN}
+      - AUTHORIZED_USER_ID=${AUTHORIZED_USER_ID}
+      - FINNHUB_API_KEY=${FINNHUB_API_KEY}
